@@ -16,7 +16,7 @@ class Review < ActiveRecord::Base
   private
 
   def checked_out
-    if reservation && reservation.check_out > Date.today
+    if reservation && reservation.checkout > Date.today
       errors.add(:reservation, "Reservation must have ended to leave a review.")
     end
   end
