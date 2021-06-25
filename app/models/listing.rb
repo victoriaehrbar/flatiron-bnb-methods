@@ -25,7 +25,7 @@ class Listing < ActiveRecord::Base
 
   def self.available(start_date, end_date)
     if start_date && end_date
-      binding.pry
+      # binding.pry
       joins(:reservations).
         where.not(reservations: {checkin: start_date..end_date}) &
       joins(:reservations).
