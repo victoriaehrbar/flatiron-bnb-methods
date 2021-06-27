@@ -24,15 +24,29 @@ class Listing < ActiveRecord::Base
   private
 
   def self.available(start_date, end_date)
+    results = []
+    array_1=start_date.split("-").map{|s|s.to_i}
+    array_2=end_date.split("-").map{|s|s.to_i}
+    date_1=Date.new(array_1[0], array_1[1], array_1[2])
+    date_2=Date.new(array_2[0], array_2[1], array_2[2])
     if start_date && end_date
       # binding.pry
-      joins(:reservations).
-        where.not(reservations: {checkin: start_date..end_date}) &
-      joins(:reservations).
-        where.not(reservations: {checkout: start_date..end_date})
-    else
-      []
+      self.all.each do |l|
+      #  l.reservations.each do |r|
+      if l.reservations.none? {|r| (date_1..date_2).cover?(r.checkin) || (date_1..date_2).cover?(r.checkout)}
+        results << l 
+    
+        end
+      end
+
+
+      # joins(:reservations).
+      #   where.not(reservations: {checkin: start_date..end_date}) ||
+      # joins(:reservations).
+      #   where.not(reservations: {checkout: start_date..end_date})
+
     end
+    results 
   end
 
   def unset_host_as_host
